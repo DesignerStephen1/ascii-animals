@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>ascii animals</title>
     <script>
       // Only Chromium can run an SVG filter inside backdrop-filter; everyone else gets frosted glass.
@@ -40,7 +40,7 @@
             <circle cx="10.5" cy="10.5" r="6.5" />
             <path d="m15.5 15.5 5 5" />
           </svg>
-          <textarea name="prompt" rows="1" placeholder="Ask anything..." aria-label="Ask anything" autofocus></textarea>
+          <textarea name="prompt" rows="1" placeholder="Ask anything..." aria-label="Ask anything"></textarea>
         </div>
         <div class="composer-bar">
           <button type="button" class="pill">
@@ -66,7 +66,6 @@
       </form>
     </main>
 
-    <p class="hint">click to scatter</p>
     <script type="module" src="/demo.ts"></script>
   </body>
 </html>

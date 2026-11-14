@@ -34,6 +34,8 @@ export function mountComposer() {
   }
 
   prompt.addEventListener("input", fit);
+  // Ready to type on load where there's a mouse; on a phone that would throw the keyboard up.
+  if (matchMedia("(hover: hover) and (pointer: fine)").matches) prompt.focus({ preventScroll: true });
   prompt.addEventListener("keydown", (e) => {
     // Enter sends, Shift+Enter is a newline; leave Enter alone mid-IME composition.
     if (e.key === "Enter" && !e.shiftKey && !e.isComposing) {

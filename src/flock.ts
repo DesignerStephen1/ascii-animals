@@ -129,7 +129,7 @@ export interface Animal<C extends Creature = Creature> {
   controls: ControlGroup[];
   /** Shared knobs that do nothing for this animal. */
   hide?: (keyof SharedTuning)[];
-  /** Screen area per individual at density 1, px². */
+  /** Screen area per individual at density 1 on a laptop-sized screen (see REFERENCE_SIZE), px². */
   area: number;
   /** Most individuals the flock will hold. */
   max?: number;
@@ -166,6 +166,12 @@ export interface WorldEvent {
 }
 
 const STARTLE_RADIUS = 240;
+/**
+ * Size of the nearest individuals (before an animal's own scale) on a laptop-sized screen, about
+ * 800px on the short side, px. Populations are tuned at this size; smaller screens draw everyone
+ * smaller and spawn more to cover the same share of the screen.
+ */
+const REFERENCE_SIZE = 160;
 
 export class Flock<C extends Creature = Creature> {
   width = 0;
@@ -203,9 +209,15 @@ export class Flock<C extends Creature = Creature> {
     return this.course + this.tuning.sway * (Math.sin(t * 0.13) + 0.5 * Math.sin(t * 0.31 + 1.7));
   }
 
+  /**
+   * How many to keep on screen. By how much of the screen they cover, not by raw area: on a small
+   * screen each one draws smaller (see base), so more of them spawn to make up for it, and a phone
+   * looks as lively as a laptop. `area` is screen area per individual at the reference size.
+   */
   get target() {
     const { width: W, height: H, animal } = this;
-    return this.count ?? clamp(Math.round(((W * H) / animal.area) * this.tuning.density), 1, animal.max ?? 200);
+    const shrink = (this.base / animal.scale / REFERENCE_SIZE) ** 2;
+    return this.count ?? clamp(Math.round(((W * H) / (animal.area * shrink)) * this.tuning.density), 1, animal.max ?? 200);
   }
 
   depthOf(roll: number) {

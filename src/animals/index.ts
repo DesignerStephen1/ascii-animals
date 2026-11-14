@@ -10,9 +10,9 @@ import { koi } from "./koi";
 /** Every animal, in the order the choices show them. */
 export const ANIMALS = {
   butterflies,
+  koi,
   jellyfish,
   dragonflies,
-  koi,
   frogs,
   cranes,
   crabs,

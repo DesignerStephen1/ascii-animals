@@ -469,14 +469,20 @@ svg { display: block; }
 .liquid .tweaks-open { backdrop-filter: blur(var(--blur)) saturate(180%); }
 .tweaks-open:hover { color: var(--text); }
 
-.hint {
-  position: fixed; left: 16px; bottom: 12px; margin: 0; pointer-events: none;
-  font: 600 12px "Geist Mono", ui-monospace, Menlo, monospace; color: var(--muted);
-}
 
 @media (max-width: 520px) {
   .pill span { display: none; }
   .pill { padding: 0 9px; }
+}
+/*
+ * Phones: the animal bar gets the whole top edge (scrolling sideways if it must), so the Tweaks
+ * button moves to the bottom right, and the panel opens as a sheet that fits the screen.
+ */
+@media (max-width: 720px) {
+  .top-bar { top: max(12px, env(safe-area-inset-top)); left: 12px; right: 12px; translate: none; justify-content: center; }
+  .choices { max-width: 100%; }
+  .tweaks-open { top: auto; bottom: max(12px, env(safe-area-inset-bottom)); right: 12px; }
+  .tweaks { top: auto; bottom: 12px; left: 12px; right: 12px; width: auto; max-height: 70vh; }
 }
 @media (prefers-reduced-motion: reduce) {
   .glass, .choices .thumb, .choices button, .send, .pill, .icon-btn { transition: none; }
