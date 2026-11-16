@@ -54,7 +54,8 @@ The extension (in `extension/`) makes the glass input actually work:
 
 - Enter searches with the browser's default search engine, or opens it if it's a URL
 - suggestions while typing: matching history first, then Google's suggestions (↑/↓, Enter, Esc)
-- the mic does speech-to-text and searches when you stop talking
+- the mic does speech-to-text and searches when you stop talking (Chrome only: other Chromium
+  browsers such as Dia can't reach Google's speech service, so the mic hides itself after the first try)
 - **Add tabs or files** lists your open tabs to jump to, or opens a local file
 
 Dia ignores `chrome_url_overrides` and opens its own start page (`chrome://start-page/…`),

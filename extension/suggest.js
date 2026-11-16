@@ -97,7 +97,11 @@
   // ---- mic: speech to text, then search ----
   const mic = form.querySelector(".icon-btn[aria-label='Voice input']");
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (mic && SR) {
+  // Chromium browsers other than Chrome (Dia, Arc, Brave...) can't reach Google's speech service
+  // and fail with "network". Once that happens, hide the mic for good.
+  const NO_VOICE = "ascii-animals:no-voice";
+  if (mic && (!SR || localStorage.getItem(NO_VOICE))) mic.hidden = true;
+  else if (mic && SR) {
     let rec = null;
     mic.addEventListener("click", () => {
       if (rec) return rec.stop();
@@ -111,7 +115,23 @@
         box.dispatchEvent(new Event("input"));
         if (r.isFinal) { rec.stop(); setTimeout(() => box.value.trim() && form.requestSubmit(), 300); }
       };
-      rec.onerror = (e) => console.warn("voice:", e.error);
+      rec.onerror = (e) => {
+        console.warn("voice:", e.error);
+        const why = {
+          "not-allowed": "Microphone blocked: allow it from the icon left of the address bar",
+          "service-not-allowed": "Microphone blocked: allow it from the icon left of the address bar",
+          network: "Voice input isn't available in this browser",
+          "no-speech": "Didn't hear anything, try again",
+          "audio-capture": "No microphone found",
+        }[e.error] || `Voice input failed (${e.error})`;
+        const placeholder = box.placeholder;
+        box.placeholder = why;
+        if (e.error === "network") {
+          localStorage.setItem(NO_VOICE, "1");
+          mic.hidden = true;
+        }
+        setTimeout(() => (box.placeholder = placeholder), 4000);
+      };
       rec.onend = () => { rec = null; mic.style.color = ""; };
       rec.start();
     });
