@@ -10,13 +10,46 @@ export function greetingFor(name: string, date = new Date()) {
   return `Still up, ${name}?`;
 }
 
-/** Greet by the time of day, and keep it current if the page stays open. */
-export function mountGreeting(name: string) {
+/**
+ * Greet by the time of day, and keep it current if the page stays open.
+ * Double-click the greeting to type your own name (Enter saves, Esc cancels);
+ * `onRename` gets the new name so the caller can save it.
+ */
+export function mountGreeting(name: string, onRename?: (name: string) => void) {
   const el = document.querySelector<HTMLElement>(".greeting");
   if (!el) return;
-  const update = () => (el.textContent = greetingFor(name));
+  let editing = false;
+  const update = () => {
+    if (!editing) el.textContent = greetingFor(name);
+  };
   update();
   setInterval(update, 60_000);
+  if (!onRename) return;
+
+  el.title = "Double-click to change the name";
+  el.addEventListener("dblclick", () => {
+    editing = true;
+    el.textContent = name;
+    el.contentEditable = "plaintext-only";
+    el.focus();
+    getSelection()?.selectAllChildren(el);
+  });
+  const finish = (save: boolean) => {
+    if (!editing) return;
+    editing = false;
+    el.contentEditable = "false";
+    const next = el.textContent?.trim() ?? "";
+    if (save && next && next !== name) {
+      name = next;
+      onRename(name);
+    }
+    update();
+  };
+  el.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") (e.preventDefault(), finish(true));
+    else if (e.key === "Escape") finish(false);
+  });
+  el.addEventListener("blur", () => finish(true));
 }
 
 /** UI only: a submit fires a `chat:submit` event on the form for whatever backend gets wired up. */

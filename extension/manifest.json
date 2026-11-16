@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "ASCII Animals New Tab",
+  "version": "0.1.0",
+  "description": "ascii-animals as your new tab page, with a working search box. Works in Chrome and Dia.",
+  "chrome_url_overrides": { "newtab": "index.html" },
+  "permissions": ["search", "tabs", "history"],
+  "host_permissions": ["https://suggestqueries.google.com/*"],
+  "background": { "service_worker": "background.js" }
+}

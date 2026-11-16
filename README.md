@@ -32,7 +32,8 @@ Everywhere:
 npm install && npm run dev
 ```
 
-`?animal=koi` picks an animal, `?count=60` pins how many.
+`?animal=koi` picks an animal, `?count=60` pins how many, `?name=Ada` sets the name in the greeting
+(or double-click the greeting to change it; it's remembered).
 
 ```ts
 import { AnimalEngine } from "./src";
@@ -41,6 +42,23 @@ const engine = new AnimalEngine(canvas, { animal: "jellyfish", theme: "dark", tu
 engine.setAnimal("cranes");
 engine.set("density", 2);
 ```
+
+## As a new tab page (Chrome, Dia)
+
+```sh
+npm run build:extension
+```
+
+then open `chrome://extensions`, turn on **Developer mode**, **Load unpacked** and pick `dist-extension/`.
+The extension (in `extension/`) makes the glass input actually work:
+
+- Enter searches with the browser's default search engine, or opens it if it's a URL
+- suggestions while typing: matching history first, then Google's suggestions (↑/↓, Enter, Esc)
+- the mic does speech-to-text and searches when you stop talking
+- **Add tabs or files** lists your open tabs to jump to, or opens a local file
+
+Dia ignores `chrome_url_overrides` and opens its own start page (`chrome://start-page/…`),
+so `background.js` redirects new tabs to the extension page instead. Chrome uses the override as usual.
 
 ## How it's put together
 
