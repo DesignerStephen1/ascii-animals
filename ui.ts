@@ -26,6 +26,8 @@ export function mountGreeting(name: string, onRename?: (name: string) => void) {
   setInterval(update, 60_000);
   if (!onRename) return;
 
+  // The masthead lets clicks through to the animals; take them back on the greeting itself.
+  el.style.pointerEvents = "auto";
   el.title = "Double-click to change the name";
   el.addEventListener("dblclick", () => {
     editing = true;
