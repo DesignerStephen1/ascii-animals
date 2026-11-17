@@ -45,14 +45,20 @@
         row.append(u);
       }
       row.addEventListener("mousedown", (e) => { e.preventDefault(); pick(it); });
-      row.addEventListener("mouseenter", () => { sel = i; render(); });
+      row.addEventListener("mouseenter", () => { sel = i; highlight(); });
       return row;
     }));
     if (items.length) { place(); list.style.display = "block"; } else hide();
   }
+  // Restyle rows in place: rebuilding them under the cursor would swallow clicks.
+  function highlight() {
+    [...list.children].forEach((row, i) => (row.style.background = i === sel ? "rgba(255,255,255,.12)" : "transparent"));
+  }
   function pick(it) {
     hide();
-    if (it.url) location.href = it.url; else go(it.text);
+    if (it.url) { box.value = it.url; location.href = it.url; return; }
+    box.value = it.text; // show it in the bar, like the arrow keys do
+    go(it.text);
   }
 
   async function update() {
