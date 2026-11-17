@@ -76,4 +76,21 @@ mountChoices(
 );
 
 mountComposer();
-mountGreeting("Stephen");
+// ?name=Ada sets the name in the greeting (otherwise the last one saved); double-click the greeting to change it.
+const saveName = (name: string) => {
+  try {
+    localStorage.setItem(STORE + "name", name);
+  } catch {
+    // Storage unavailable: the name lasts until reload.
+  }
+};
+let name = params.get("name")?.trim();
+if (name) saveName(name);
+else {
+  try {
+    name = localStorage.getItem(STORE + "name") ?? undefined;
+  } catch {
+    // Storage unavailable: use the default.
+  }
+}
+mountGreeting(name || "Stephen", saveName);

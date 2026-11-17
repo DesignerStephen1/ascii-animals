@@ -4,10 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>ascii animals</title>
-    <script>
-      // Only Chromium can run an SVG filter inside backdrop-filter; everyone else gets frosted glass.
-      if (/Chrome\//.test(navigator.userAgent)) document.documentElement.classList.add("liquid");
-    </script>
+    <!-- Only Chromium can run an SVG filter inside backdrop-filter; everyone else gets frosted glass. -->
+    <script src="./liquid.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/page.css" />
